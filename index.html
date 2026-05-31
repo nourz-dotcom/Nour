@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Nour — نور</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream:#FAF7F2; --cream-dark:#F2EDE3; --warm-white:#FFFCF8;
+  --gold:#C9A96E; --gold-light:#E8D5B0; --gold-dark:#9B7A42;
+  --text-primary:#2C2416; --text-secondary:#6B5B3E; --text-muted:#A89070;
+  --border:rgba(201,169,110,0.2); --border-strong:rgba(201,169,110,0.4);
+  --success:#5C8B6E; --success-light:#EBF4EF;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text-primary);min-height:100vh;max-width:430px;margin:0 auto;}
+.app{min-height:100vh;padding-bottom:90px;}
+.header{padding:48px 24px 14px;background:var(--warm-white);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10;}
+.header-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
+.app-name{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;letter-spacing:0.05em;line-height:1;}
+.app-name span{font-style:italic;color:var(--gold);}
+.date-str{font-size:11px;color:var(--text-muted);text-align:right;line-height:1.6;}
+.header-meta{display:flex;gap:8px;align-items:center;}
+.streak-bar{display:flex;align-items:center;gap:8px;padding:7px 12px;background:var(--cream-dark);border-radius:10px;border:1px solid var(--border);flex:1;}
+.streak-text{font-size:12px;color:var(--text-secondary);flex:1;}
+.streak-days{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500;color:var(--gold-dark);}
+.day-badge{padding:7px 12px;background:var(--warm-white);border-radius:10px;border:1px solid var(--border);font-size:11px;color:var(--text-muted);white-space:nowrap;text-align:center;}
+.day-badge strong{display:block;font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gold-dark);font-weight:500;}
+
+.progress-section{padding:18px 24px 0;display:flex;align-items:center;gap:16px;}
+.progress-ring-wrap{position:relative;width:76px;height:76px;flex-shrink:0;}
+.progress-ring-wrap svg{transform:rotate(-90deg);}
+.progress-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.progress-pct{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:500;line-height:1;}
+.progress-label{font-size:9px;color:var(--text-muted);letter-spacing:0.08em;text-transform:uppercase;margin-top:2px;}
+.progress-words{flex:1;}
+.progress-greeting{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:400;font-style:italic;line-height:1.3;margin-bottom:4px;}
+.progress-sub{font-size:11px;color:var(--text-muted);line-height:1.5;}
+
+.time-banner{margin:14px 24px 0;padding:10px 14px;border-radius:12px;border:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+.time-banner-icon{font-size:20px;}
+.time-banner-title{font-size:13px;font-weight:500;}
+.time-banner-sub{font-size:11px;color:var(--text-muted);margin-top:1px;}
+
+.section{padding:16px 24px 0;}
+.section-title{font-size:10px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);margin-bottom:10px;}
+
+.task-card{background:var(--warm-white);border-radius:14px;border:1px solid var(--border);margin-bottom:8px;overflow:hidden;transition:opacity 0.2s;}
+.task-card.urgent{border-color:var(--gold);}
+.task-card.done-card{opacity:0.55;}
+.task-top{padding:12px 14px 10px;display:flex;align-items:flex-start;gap:10px;cursor:pointer;}
+.task-emoji{font-size:20px;flex-shrink:0;margin-top:1px;}
+.task-main{flex:1;}
+.task-name{font-size:14px;font-weight:500;margin-bottom:2px;transition:color 0.2s;}
+.done-card .task-name{text-decoration:line-through;color:var(--text-muted);}
+.task-desc{font-size:12px;color:var(--text-secondary);line-height:1.5;}
+.task-time-badge{font-size:10px;padding:3px 7px;border-radius:8px;background:var(--cream-dark);color:var(--text-muted);white-space:nowrap;flex-shrink:0;}
+.task-expand{padding:0 14px 10px;}
+.task-motivation{font-size:12px;font-style:italic;color:var(--gold-dark);line-height:1.5;padding:8px 10px;background:var(--cream-dark);border-radius:8px;margin-bottom:8px;}
+.task-reward{font-size:12px;color:var(--success);line-height:1.5;padding:8px 10px;background:var(--success-light);border-radius:8px;margin-bottom:8px;}
+.task-btn{width:100%;padding:9px;border-radius:10px;border:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all 0.2s;background:var(--text-primary);color:var(--cream);}
+.task-btn:active{opacity:0.8;}
+.task-btn.undone{background:var(--cream-dark);color:var(--text-secondary);border:1px solid var(--border);}
+
+.pillar-accord{background:var(--warm-white);border-radius:14px;border:1px solid var(--border);margin-bottom:8px;overflow:hidden;}
+.pillar-accord-header{padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;}
+.pillar-accord-icon{font-size:20px;}
+.pillar-accord-main{flex:1;}
+.pillar-accord-name{font-size:14px;font-weight:500;}
+.pillar-accord-sub{font-size:11px;color:var(--text-muted);margin-top:1px;}
+.pillar-accord-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px;}
+.pillar-accord-pct{font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--gold-dark);}
+.pillar-accord-bar{width:60px;height:3px;background:var(--cream-dark);border-radius:2px;overflow:hidden;}
+.pillar-accord-fill{height:100%;background:var(--gold);border-radius:2px;transition:width 0.3s;}
+.pillar-accord-body{padding:0 14px 12px;border-top:1px solid var(--border);}
+.pillar-task-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);cursor:pointer;}
+.pillar-task-row:last-child{border-bottom:none;}
+.pillar-check{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--border-strong);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
+.pillar-task-row.done .pillar-check{background:var(--success);border-color:var(--success);}
+.pillar-task-name{font-size:13px;flex:1;}
+.pillar-task-row.done .pillar-task-name{color:var(--text-muted);text-decoration:line-through;}
+.pillar-task-emoji{font-size:15px;}
+
+.char-card{background:var(--warm-white);border-radius:18px;border:1px solid var(--border);padding:22px;text-align:center;margin-bottom:10px;}
+.char-fig{font-size:56px;display:block;margin-bottom:10px;}
+.char-name{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;margin-bottom:4px;}
+.char-state{font-size:12px;color:var(--text-muted);margin-bottom:12px;}
+.char-pills{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;}
+.char-pill{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:500;}
+.cp-faith{background:#FDF3E3;color:#9B6A1A;}
+.cp-body{background:#E8F2F0;color:#2E6B5F;}
+.cp-mind{background:#EEF0FB;color:#3D3E8F;}
+
+.quote-card{background:var(--text-primary);border-radius:14px;padding:18px;margin-bottom:8px;}
+.quote-text{font-family:'Cormorant Garamond',serif;font-size:16px;font-style:italic;color:var(--cream);line-height:1.6;}
+.quote-src{font-size:10px;color:var(--gold);margin-top:8px;text-align:right;letter-spacing:0.06em;}
+
+.wins-input-wrap{display:flex;gap:8px;margin-bottom:10px;}
+.wins-input{flex:1;padding:10px 14px;border-radius:12px;border:1px solid var(--border-strong);background:var(--warm-white);font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text-primary);outline:none;transition:border-color 0.2s;}
+.wins-input:focus{border-color:var(--gold);}
+.wins-input::placeholder{color:var(--text-muted);}
+.wins-add-btn{width:40px;height:40px;border-radius:12px;background:var(--text-primary);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.win-item{display:flex;gap:10px;padding:10px 14px;background:var(--warm-white);border-radius:12px;border:1px solid var(--border);margin-bottom:6px;animation:fadeIn 0.25s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+.win-dot{width:5px;height:5px;border-radius:50%;background:var(--gold);margin-top:7px;flex-shrink:0;}
+.win-text{font-size:13px;color:var(--text-primary);line-height:1.5;flex:1;}
+.win-date{font-size:10px;color:var(--text-muted);white-space:nowrap;}
+.empty-state{text-align:center;padding:28px 20px;color:var(--text-muted);font-size:13px;font-style:italic;}
+
+.collapse-toggle{display:flex;align-items:center;gap:8px;cursor:pointer;padding:8px 0;color:var(--text-muted);font-size:12px;}
+.collapse-toggle svg{transition:transform 0.2s;}
+.collapse-toggle.open svg{transform:rotate(180deg);}
+
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--warm-white);border-top:1px solid var(--border);padding:10px 0 20px;display:flex;justify-content:space-around;z-index:20;}
+.nav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;background:none;border:none;padding:4px 12px;}
+.nav-btn-icon{font-size:18px;color:var(--text-muted);transition:color 0.2s;}
+.nav-btn.active .nav-btn-icon{color:var(--gold-dark);}
+.nav-btn-label{font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);}
+.nav-btn.active .nav-btn-label{color:var(--gold-dark);}
+.page{display:none;}
+.page.active{display:block;}
+.divider{height:1px;background:var(--border);margin:16px 0 0;}
+</style>
+</head>
+<body>
+<div class="app">
+
+<div class="header">
+  <div class="header-top">
+    <div class="app-name">Nour <span>نور</span></div>
+    <div class="date-str" id="dateStr"></div>
+  </div>
+  <div class="header-meta">
+    <div class="streak-bar">
+      <span>🕯️</span>
+      <span class="streak-text">Streak</span>
+      <span class="streak-days" id="streakCount">0</span>
+      <span style="font-size:11px;color:var(--text-muted);margin-left:2px">days</span>
+    </div>
+    <div class="day-badge">
+      <strong id="dayCount">1</strong>
+      of 75
+    </div>
+  </div>
+</div>
+
+<!-- TODAY -->
+<div class="page active" id="page-today">
+  <div class="progress-section">
+    <div class="progress-ring-wrap">
+      <svg width="76" height="76" viewBox="0 0 76 76">
+        <circle cx="38" cy="38" r="31" fill="none" stroke="#F2EDE3" stroke-width="5"/>
+        <circle cx="38" cy="38" r="31" fill="none" stroke="#C9A96E" stroke-width="5"
+          stroke-linecap="round" stroke-dasharray="194.78" stroke-dashoffset="194.78" id="progressCircle"/>
+      </svg>
+      <div class="progress-center">
+        <span class="progress-pct" id="progressPct">0%</span>
+        <span class="progress-label">today</span>
+      </div>
+    </div>
+    <div class="progress-words">
+      <div class="progress-greeting" id="progressGreeting">Begin with Bismillah</div>
+      <div class="progress-sub" id="progressSub">Your morning anchor awaits</div>
+    </div>
+  </div>
+
+  <div class="time-banner" id="timeBanner" style="margin:14px 24px 0;">
+    <span class="time-banner-icon" id="bannerIcon">🌙</span>
+    <div>
+      <div class="time-banner-title" id="bannerTitle">Loading...</div>
+      <div class="time-banner-sub" id="bannerSub"></div>
+    </div>
+  </div>
+
+  <div class="section" id="nowSection"></div>
+  <div class="section" id="upcomingSection"></div>
+  <div class="section" id="doneSection"></div>
+  <div class="divider"></div>
+</div>
+
+<!-- PILLARS -->
+<div class="page" id="page-pillars">
+  <div class="section" style="padding-top:18px;">
+    <div class="section-title">All Six Pillars</div>
+    <div id="pillarsAccordion"></div>
+  </div>
+  <div class="section" style="padding-top:16px;padding-bottom:20px;">
+    <div class="section-title">Your Nour</div>
+    <div class="char-card">
+      <span class="char-fig" id="charFig">🌱</span>
+      <div class="char-name">Nour</div>
+      <div class="char-state" id="charState">Just beginning her journey</div>
+      <div class="char-pills">
+        <span class="char-pill cp-faith" id="cpFaith">Faith: awakening</span>
+        <span class="char-pill cp-body" id="cpBody">Body: resting</span>
+        <span class="char-pill cp-mind" id="cpMind">Mind: settling</span>
+      </div>
+    </div>
+    <div class="quote-card">
+      <div class="quote-text" id="dailyQuote"></div>
+      <div class="quote-src" id="quoteSource"></div>
+    </div>
+  </div>
+</div>
+
+<!-- WINS -->
+<div class="page" id="page-wins">
+  <div class="section" style="padding-top:18px;">
+    <div class="section-title">Wins Log</div>
+    <div class="wins-input-wrap">
+      <input class="wins-input" id="winInput" placeholder="One small win today..." maxlength="120">
+      <button class="wins-add-btn" onclick="addWin()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M7 1v12M1 7h12" stroke="#FAF7F2" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+    <div id="winsList"></div>
+  </div>
+</div>
+
+
+<!-- FOOD -->
+<div class="page" id="page-food">
+  <div class="section" style="padding-top:18px;">
+    <div class="section-title">Daily Template</div>
+
+    <div style="background:var(--warm-white);border-radius:14px;border:1px solid var(--border);overflow:hidden;margin-bottom:8px;">
+      <div style="background:linear-gradient(135deg,#FDF9F0,#F8F2E8);padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;">
+        <span style="font-size:20px">☀️</span>
+        <div>
+          <div style="font-size:14px;font-weight:500">Breakfast</div>
+          <div style="font-size:11px;color:var(--text-muted)">Toastie · fruit · coffee</div>
+        </div>
+      </div>
+      <div style="padding:12px 16px;font-size:12px;color:var(--text-secondary);line-height:1.7;">
+        Toasted sandwich in the airfryer · piece of fruit · chia water first · coffee slowly<br>
+        <span style="color:var(--text-muted);font-style:italic">The anchor that sets the tone for the day.</span>
+      </div>
+    </div>
+
+    <div style="background:var(--warm-white);border-radius:14px;border:1px solid var(--border);overflow:hidden;margin-bottom:8px;">
+      <div style="background:linear-gradient(135deg,#F0F7F0,#E8F2E8);padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;">
+        <span style="font-size:20px">🌿</span>
+        <div>
+          <div style="font-size:14px;font-weight:500">Lunch</div>
+          <div style="font-size:11px;color:var(--text-muted)">Protein · carb · vegetable · sauce</div>
+        </div>
+      </div>
+      <div style="padding:12px 16px;font-size:12px;color:var(--text-secondary);line-height:1.7;">
+        Palm-sized protein · one carb portion · one or two handfuls of vegetables · a sauce that makes it feel like a meal<br>
+        <span style="color:var(--text-muted);font-style:italic">Cooked vegetables are easier on digestion than large raw salads.</span>
+      </div>
+    </div>
+
+    <div style="background:var(--warm-white);border-radius:14px;border:1px solid var(--border);overflow:hidden;margin-bottom:8px;">
+      <div style="background:linear-gradient(135deg,#F7F3F0,#F2EDE8);padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;">
+        <span style="font-size:20px">🍊</span>
+        <div>
+          <div style="font-size:14px;font-weight:500">Snack (if needed)</div>
+          <div style="font-size:11px;color:var(--text-muted)">Prepared snack box</div>
+        </div>
+      </div>
+      <div style="padding:12px 16px;font-size:12px;color:var(--text-secondary);line-height:1.7;">
+        Fruit portion · cheese or protein · a few crackers · something colourful<br>
+        <span style="color:var(--text-muted);font-style:italic">Prepared in advance so hunger doesn't make the decision.</span>
+      </div>
+    </div>
+
+    <div style="background:var(--warm-white);border-radius:14px;border:1px solid var(--border);overflow:hidden;margin-bottom:8px;">
+      <div style="background:linear-gradient(135deg,#F0F4F7,#E8EEF2);padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;">
+        <span style="font-size:20px">🌙</span>
+        <div>
+          <div style="font-size:14px;font-weight:500">Dinner</div>
+          <div style="font-size:11px;color:var(--text-muted)">Comforting protein plate</div>
+        </div>
+      </div>
+      <div style="padding:12px 16px;font-size:12px;color:var(--text-secondary);line-height:1.7;">
+        Warm, satisfying, simple. Protein centred. Air fryer or one pan. Something that feels like a proper meal.<br>
+        <span style="color:var(--text-muted);font-style:italic">Not a punishment. A meal you looked forward to.</span>
+      </div>
+    </div>
+
+    <div style="background:var(--text-primary);border-radius:14px;overflow:hidden;margin-bottom:8px;">
+      <div style="padding:14px 16px;border-bottom:1px solid rgba(201,169,110,0.3);display:flex;align-items:center;gap:10px;">
+        <span style="font-size:20px">🍵</span>
+        <div>
+          <div style="font-size:14px;font-weight:500;color:var(--cream)">Evening Treat Ritual</div>
+          <div style="font-size:11px;color:var(--gold-light)">Intentional · chosen · guilt-free</div>
+        </div>
+      </div>
+      <div style="padding:12px 16px;font-size:12px;color:var(--gold-light);line-height:1.7;">
+        Your chosen treat with a hot drink. Sit down. Enjoy it fully.<br>
+        Biscuits · wafer · mini cake · chocolate · ice cream bar<br>
+        <span style="color:var(--gold);font-style:italic">This is not cheating. This is the system working exactly as planned.</span>
+      </div>
+    </div>
+
+    <div class="section-title" style="margin-top:16px;">Weekly Grocery Defaults</div>
+
+    <div style="background:var(--warm-white);border-radius:14px;border:1px solid var(--border);margin-bottom:8px;overflow:hidden;">
+      <div style="padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;">
+        <span style="font-size:16px">🥩</span>
+        <div style="font-size:13px;font-weight:500">Protein — choose 4</div>
+      </div>
+      <div style="padding:10px 16px;display:flex;flex-wrap:wrap;gap:6px;">
+        <span style="padding:4px 10px;background:var(--cream-dark);border-radius:20px;font-size:11px;color:var(--text-secondary)">Chicken breast</span>
+        <span style="padding:4px 10px;background:var(--cream-dark);border-radius:20px;font-size:11px;color:var(--text-secondary)">Turkey slices</span>
+        <span style="padding:4px 10px;background:var(--cream-dark);border-radius:20px;font-size:11px;color:var(--text-secondary)">Eggs</span>
+        <span style="padding:4px 10px;background:var(--cream-dark);border-radius:20px;font-size:11px;color:var(--text-secondary)">Greek yogurt</span>
+        <span style="padding:4px 10px;background:var(--cream-dark);border-radius:20px;font-size:11px;color:var(--text-secondary)">Salmon</span>
+        <span style="padding:4px 10px;background:var(--cream-dark);border-radius:20px;font-size:11px;color:var(--text-secondary)">Steak</span>
+        <span style="padding:4px 10px;background:var(--cream-dark);border-radius:20px;font-size:11px;color:var(--text-secondary)">Cottage cheese</span>
+        <span style="padding:4px 10px;background:var(--cream-dark);border-radius:20px;font-size:11px;color:var(--text-secondary)">Cheese sticks</span>
+      </div>
+    </div>
+
+    <div style="background:var(--warm-white);border-radius:14px;border:1px solid var(--border);margin-bottom:8px;overflow:hidden;">
+      <div style="padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;">
+        <span style="font-size:16px">🍞</span>
+        <div style="font-size:13px;font-weight:500">Carbs — choose 3</div>
+      </div>
+      <div style="padding:10px 16px;display:flex;flex-wrap:wrap;gap:6px;">
+        <span style="padding:4px 10px;background:var(--cream-dark);border-radius:20px;font-size:11px;color:var(--text-secondary)">Sourdough bread</span>
+        <span style="padding:4px 10px;background:var(--cream-dark);border-radius:20px;font-size:11px;color:var(--text-secondary)">Potatoes</span>
+        <span style="padding:4px 10px;background:var(--cream-dark);border-radius:20px;font-size:11px;color:var(--text-secondary)">Rice</span>
+        <span style="padding:4px 10px;background:var(--cream-dark);border-radius:20px;font-size:11px;color:var(--text-secondary)">Wraps / pita</span>
+        <span style="padding:4px 10px;background:var(--cream-dark);border-radius:20px;font-size:11px;color:var(--text-secondary)">Oats</span>
+      </div>
+    </div>
+
+    <div style="background:var(--warm-white);border-radius:14px;border:1px solid var(--border);margin-bottom:8px;overflow:hidden;">
+      <div style="padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;">
+        <span style="font-size:16px">🥦</span>
+        <div style="font-size:13px;font-weight:500">Produce — choose 5–6</div>
+      </div>
+      <div style="padding:10px 16px;display:flex;flex-wrap:wrap;gap:6px;">
+        <span style="padding:4px 10px;background:var(--success-light);border-radius:20px;font-size:11px;color:var(--success)">Cucumber</span>
+        <span style="padding:4px 10px;background:var(--success-light);border-radius:20px;font-size:11px;color:var(--success)">Tomatoes</span>
+        <span style="padding:4px 10px;background:var(--success-light);border-radius:20px;font-size:11px;color:var(--success)">Spinach</span>
+        <span style="padding:4px 10px;background:var(--success-light);border-radius:20px;font-size:11px;color:var(--success)">Carrots</span>
+        <span style="padding:4px 10px;background:var(--success-light);border-radius:20px;font-size:11px;color:var(--success)">Zucchini</span>
+        <span style="padding:4px 10px;background:var(--success-light);border-radius:20px;font-size:11px;color:var(--success)">Strawberries</span>
+        <span style="padding:4px 10px;background:var(--success-light);border-radius:20px;font-size:11px;color:var(--success)">Grapes</span>
+        <span style="padding:4px 10px;background:var(--success-light);border-radius:20px;font-size:11px;color:var(--success)">Mandarins</span>
+      </div>
+    </div>
+
+    <div style="background:var(--warm-white);border-radius:14px;border:1px solid var(--border);margin-bottom:8px;overflow:hidden;">
+      <div style="padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;">
+        <span style="font-size:16px">🍫</span>
+        <div style="font-size:13px;font-weight:500">Enjoyment foods — choose 2–3</div>
+      </div>
+      <div style="padding:10px 16px;font-size:12px;color:var(--text-secondary);line-height:1.7;">
+        Good biscuits · wafer bars · mini cakes · dark chocolate · ice cream bars<br>
+        <span style="color:var(--text-muted);font-style:italic">Planned enjoyment works better than white-knuckling restriction.</span>
+      </div>
+    </div>
+
+
+    <div class="section-title" style="margin-top:16px;">Breakfast Recipes</div>
+
+    <div style="background:var(--warm-white);border-radius:14px;border:1px solid var(--border);margin-bottom:8px;overflow:hidden;">
+      <div style="padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;cursor:pointer;" onclick="toggleRecipe('r1')">
+        <span style="font-size:18px">🥚</span>
+        <div style="flex:1;font-size:13px;font-weight:500">Egg & Spinach Toastie</div>
+        <span style="font-size:11px;color:var(--text-muted)">5 min · air fryer</span>
+      </div>
+      <div id="r1" style="display:none;padding:12px 16px;font-size:12px;color:var(--text-secondary);line-height:1.9;">
+        <strong>Ingredients:</strong><br>
+        2 eggs · handful of spinach · 1 slice cheese · 2 slices sourdough<br><br>
+        <strong>Method:</strong><br>
+        Scramble eggs in a pan with wilted spinach. Place on toasted sourdough. Top with cheese slice. Air fryer 2–3 min until melted.<br><br>
+        <em style="color:var(--text-muted)">High protein, iron from spinach, satisfying and warm.</em>
+      </div>
+    </div>
+
+    <div style="background:var(--warm-white);border-radius:14px;border:1px solid var(--border);margin-bottom:8px;overflow:hidden;">
+      <div style="padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;cursor:pointer;" onclick="toggleRecipe('r2')">
+        <span style="font-size:18px">🫙</span>
+        <div style="flex:1;font-size:13px;font-weight:500">Turkey & Labneh</div>
+        <span style="font-size:11px;color:var(--text-muted)">3 min · no cook</span>
+      </div>
+      <div id="r2" style="display:none;padding:12px 16px;font-size:12px;color:var(--text-secondary);line-height:1.9;">
+        <strong>Ingredients:</strong><br>
+        80–100g turkey slices · 1 tbsp labneh · sliced cucumber · dried mint · 2 slices sourdough<br><br>
+        <strong>Method:</strong><br>
+        Toast bread. Spread labneh. Layer turkey and cucumber. Sprinkle dried mint. Done.<br><br>
+        <em style="color:var(--text-muted)">No cooking. Fresh and light. Perfect when you have no energy.</em>
+      </div>
+    </div>
+
+    <div style="background:var(--warm-white);border-radius:14px;border:1px solid var(--border);margin-bottom:8px;overflow:hidden;">
+      <div style="padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;cursor:pointer;" onclick="toggleRecipe('r3')">
+        <span style="font-size:18px">🍗</span>
+        <div style="flex:1;font-size:13px;font-weight:500">Chicken Pesto Toastie</div>
+        <span style="font-size:11px;color:var(--text-muted)">4 min · air fryer</span>
+      </div>
+      <div id="r3" style="display:none;padding:12px 16px;font-size:12px;color:var(--text-secondary);line-height:1.9;">
+        <strong>Ingredients:</strong><br>
+        Leftover or rotisserie chicken · 1 tsp pesto · sliced tomato · 2 slices sourdough<br><br>
+        <strong>Method:</strong><br>
+        Toast bread. Spread pesto on both slices. Layer chicken and tomato. Air fryer 3 min until warm and slightly crispy.<br><br>
+        <em style="color:var(--text-muted)">Uses leftover chicken. Feels like a proper café sandwich.</em>
+      </div>
+    </div>
+
+    <div style="background:var(--warm-white);border-radius:14px;border:1px solid var(--border);margin-bottom:8px;overflow:hidden;">
+      <div style="padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;cursor:pointer;" onclick="toggleRecipe('r4')">
+        <span style="font-size:18px">🍳</span>
+        <div style="flex:1;font-size:13px;font-weight:500">Fried Egg & Cheese</div>
+        <span style="font-size:11px;color:var(--text-muted)">5 min · one pan</span>
+      </div>
+      <div id="r4" style="display:none;padding:12px 16px;font-size:12px;color:var(--text-secondary);line-height:1.9;">
+        <strong>Ingredients:</strong><br>
+        2 eggs · 1 slice cheese · sliced tomato · 2 slices sourdough · tiny bit of butter<br><br>
+        <strong>Method:</strong><br>
+        Fry eggs in a tiny bit of butter. Toast bread. Place egg on toast, top with cheese, let it melt from the heat of the egg. Add tomato slices.<br><br>
+        <em style="color:var(--text-muted)">The simplest comfort breakfast. Never gets old.</em>
+      </div>
+    </div>
+
+    <div style="background:var(--warm-white);border-radius:14px;border:1px solid var(--border);margin-bottom:8px;overflow:hidden;">
+      <div style="padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;cursor:pointer;" onclick="toggleRecipe('r5')">
+        <span style="font-size:18px">🥑</span>
+        <div style="flex:1;font-size:13px;font-weight:500">Turkey & Avocado Wrap</div>
+        <span style="font-size:11px;color:var(--text-muted)">3 min · no cook</span>
+      </div>
+      <div id="r5" style="display:none;padding:12px 16px;font-size:12px;color:var(--text-secondary);line-height:1.9;">
+        <strong>Ingredients:</strong><br>
+        80–100g turkey slices · ½ avocado mashed · squeeze of lemon · salt · 1 wrap or pita<br><br>
+        <strong>Method:</strong><br>
+        Warm the wrap 30 seconds in microwave. Spread mashed avocado. Layer turkey. Squeeze lemon, add salt. Roll and eat.<br><br>
+        <em style="color:var(--text-muted)">Creamy, satisfying, no cooking at all.</em>
+      </div>
+    </div>
+
+
+    <div class="section-title" style="margin-top:16px;">Lunch Recipes</div>
+
+    <div style="background:var(--warm-white);border-radius:14px;border:1px solid var(--border);margin-bottom:8px;overflow:hidden;">
+      <div style="padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;cursor:pointer;" onclick="toggleRecipe('l1')">
+        <span style="font-size:18px">🍗</span>
+        <div style="flex:1;font-size:13px;font-weight:500">Air Fryer Chicken & Roasted Veg</div>
+        <span style="font-size:11px;color:var(--text-muted)">20 min · air fryer</span>
+      </div>
+      <div id="l1" style="display:none;padding:12px 16px;font-size:12px;color:var(--text-secondary);line-height:1.9;">
+        <strong>Ingredients:</strong><br>
+        120–150g chicken breast · zucchini · carrot · olive oil · salt · cumin or paprika · side of rice or bread<br><br>
+        <strong>Method:</strong><br>
+        Slice chicken and veg. Toss in olive oil and spices. Air fryer 180°C for 16–18 min, shaking halfway. Serve with rice or a slice of sourdough.<br><br>
+        <em style="color:var(--text-muted)">One basket, almost no cleanup. Warm and satisfying.</em>
+      </div>
+    </div>
+
+    <div style="background:var(--warm-white);border-radius:14px;border:1px solid var(--border);margin-bottom:8px;overflow:hidden;">
+      <div style="padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;cursor:pointer;" onclick="toggleRecipe('l2')">
+        <span style="font-size:18px">🥗</span>
+        <div style="flex:1;font-size:13px;font-weight:500">Turkey & Potato Plate</div>
+        <span style="font-size:11px;color:var(--text-muted)">15 min · microwave + airfryer</span>
+      </div>
+      <div id="l2" style="display:none;padding:12px 16px;font-size:12px;color:var(--text-secondary);line-height:1.9;">
+        <strong>Ingredients:</strong><br>
+        80–100g turkey slices · 150–200g potato · cucumber · tomato · labneh or sauce of choice<br><br>
+        <strong>Method:</strong><br>
+        Microwave potato until soft (5–7 min), then air fryer 5 min for crispy skin. Serve turkey slices alongside with raw veg and a dollop of labneh.<br><br>
+        <em style="color:var(--text-muted)">High volume, very filling, minimal effort.</em>
+      </div>
+    </div>
+
+    <div style="background:var(--warm-white);border-radius:14px;border:1px solid var(--border);margin-bottom:8px;overflow:hidden;">
+      <div style="padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;cursor:pointer;" onclick="toggleRecipe('l3')">
+        <span style="font-size:18px">🐟</span>
+        <div style="flex:1;font-size:13px;font-weight:500">Salmon with Spinach & Rice</div>
+        <span style="font-size:11px;color:var(--text-muted)">18 min · one pan</span>
+      </div>
+      <div id="l3" style="display:none;padding:12px 16px;font-size:12px;color:var(--text-secondary);line-height:1.9;">
+        <strong>Ingredients:</strong><br>
+        120–150g salmon fillet · handful of spinach · 100g cooked rice · lemon · olive oil · salt<br><br>
+        <strong>Method:</strong><br>
+        Pan-fry salmon in a little olive oil, 4 min each side. Wilt spinach in the same pan for 1 min. Serve over rice with a squeeze of lemon.<br><br>
+        <em style="color:var(--text-muted)">Omega-3s, anti-inflammatory, feels like a restaurant plate.</em>
+      </div>
+    </div>
+
+    <div class="section-title" style="margin-top:16px;">Dinner Recipes</div>
+
+    <div style="background:var(--warm-white);border-radius:14px;border:1px solid var(--border);margin-bottom:8px;overflow:hidden;">
+      <div style="padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;cursor:pointer;" onclick="toggleRecipe('d1')">
+        <span style="font-size:18px">🥩</span>
+        <div style="flex:1;font-size:13px;font-weight:500">Steak & Air Fryer Carrots</div>
+        <span style="font-size:11px;color:var(--text-muted)">20 min · air fryer</span>
+      </div>
+      <div id="d1" style="display:none;padding:12px 16px;font-size:12px;color:var(--text-secondary);line-height:1.9;">
+        <strong>Ingredients:</strong><br>
+        120–150g steak · carrots sliced · olive oil · salt · pepper · garlic powder<br><br>
+        <strong>Method:</strong><br>
+        Toss carrots in olive oil and seasoning. Air fryer 15 min at 190°C. Pan-sear steak 2–3 min each side. Rest 2 min before cutting. Serve together.<br><br>
+        <em style="color:var(--text-muted)">High protein, naturally sweet carrots, no stress.</em>
+      </div>
+    </div>
+
+    <div style="background:var(--warm-white);border-radius:14px;border:1px solid var(--border);margin-bottom:8px;overflow:hidden;">
+      <div style="padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;cursor:pointer;" onclick="toggleRecipe('d2')">
+        <span style="font-size:18px">🍲</span>
+        <div style="flex:1;font-size:13px;font-weight:500">One-Pan Chicken & Zucchini</div>
+        <span style="font-size:11px;color:var(--text-muted)">20 min · one pan</span>
+      </div>
+      <div id="d2" style="display:none;padding:12px 16px;font-size:12px;color:var(--text-secondary);line-height:1.9;">
+        <strong>Ingredients:</strong><br>
+        120–150g chicken breast · zucchini · tomatoes · garlic · olive oil · dried herbs · pita or sourdough<br><br>
+        <strong>Method:</strong><br>
+        Dice chicken and zucchini. Sauté garlic in olive oil 1 min. Add chicken, cook 5 min. Add zucchini and tomatoes, cook 8 min until soft. Season. Serve with bread to scoop.<br><br>
+        <em style="color:var(--text-muted)">Comforting, warm, feels like home cooking. One pan.</em>
+      </div>
+    </div>
+
+    <div style="background:var(--warm-white);border-radius:14px;border:1px solid var(--border);margin-bottom:8px;overflow:hidden;">
+      <div style="padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;cursor:pointer;" onclick="toggleRecipe('d3')">
+        <span style="font-size:18px">🥚</span>
+        <div style="flex:1;font-size:13px;font-weight:500">Shakshuka-Style Eggs</div>
+        <span style="font-size:11px;color:var(--text-muted)">15 min · one pan</span>
+      </div>
+      <div id="d3" style="display:none;padding:12px 16px;font-size:12px;color:var(--text-secondary);line-height:1.9;">
+        <strong>Ingredients:</strong><br>
+        3 eggs · tinned or fresh tomatoes · spinach · garlic · olive oil · cumin · paprika · sourdough to serve<br><br>
+        <strong>Method:</strong><br>
+        Sauté garlic in olive oil. Add tomatoes and spices, simmer 5 min. Add spinach, wilt. Make wells, crack eggs in. Cover and cook 5–7 min until whites set. Serve with bread.<br><br>
+        <em style="color:var(--text-muted)">Warming, deeply satisfying, looks beautiful in the pan.</em>
+      </div>
+    </div>
+
+    <div class="section-title" style="margin-top:16px;">Today's Meals</div>
+    <div style="background:var(--warm-white);border-radius:14px;border:1px solid var(--border);padding:14px 16px;margin-bottom:8px;">
+      <div style="font-size:12px;color:var(--text-muted);margin-bottom:10px;font-style:italic;">Tap to log each meal as done today</div>
+      <div id="mealLog"></div>
+    </div>
+
+    <div class="section-title" style="margin-top:16px;">Portion Guide</div>
+    <div style="background:var(--warm-white);border-radius:14px;border:1px solid var(--border);padding:14px 16px;margin-bottom:20px;">
+      <div style="font-size:12px;color:var(--text-secondary);line-height:2;">
+        <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--border);padding-bottom:6px;margin-bottom:6px;">
+          <span style="font-weight:500;color:var(--text-primary)">Chicken / fish / steak</span>
+          <span>120–150g cooked · palm-sized</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--border);padding-bottom:6px;margin-bottom:6px;">
+          <span style="font-weight:500;color:var(--text-primary)">Greek yogurt</span>
+          <span>150–200g</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--border);padding-bottom:6px;margin-bottom:6px;">
+          <span style="font-weight:500;color:var(--text-primary)">Cheese</span>
+          <span>20–30g</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--border);padding-bottom:6px;margin-bottom:6px;">
+          <span style="font-weight:500;color:var(--text-primary)">Bread</span>
+          <span>2 slices</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--border);padding-bottom:6px;margin-bottom:6px;">
+          <span style="font-weight:500;color:var(--text-primary)">Rice (cooked)</span>
+          <span>100g</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--border);padding-bottom:6px;margin-bottom:6px;">
+          <span style="font-weight:500;color:var(--text-primary)">Potatoes</span>
+          <span>150–200g</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--border);padding-bottom:6px;margin-bottom:6px;">
+          <span style="font-weight:500;color:var(--text-primary)">Fruit (berries/grapes)</span>
+          <span>80–120g</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;">
+          <span style="font-weight:500;color:var(--text-primary)">Oils / butter / pesto</span>
+          <span>1 tsp – 1 tbsp</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="bottom-nav">
+  <button class="nav-btn active" onclick="switchPage('today',this)">
+    <span class="nav-btn-icon">◎</span>
+    <span class="nav-btn-label">Today</span>
+  </button>
+  <button class="nav-btn" onclick="switchPage('pillars',this)">
+    <span class="nav-btn-icon">✦</span>
+    <span class="nav-btn-label">Pillars</span>
+  </button>
+  <button class="nav-btn" onclick="switchPage('food',this)">
+    <span class="nav-btn-icon">❋</span>
+    <span class="nav-btn-label">Food</span>
+  </button>
+  <button class="nav-btn" onclick="switchPage('wins',this)">
+    <span class="nav-btn-icon">◈</span>
+    <span class="nav-btn-label">Wins</span>
+  </button>
+</div>
+</div>
+
+<script>
+const START_DATE = '2026-06-01';
+
+const ALL_TASKS = [
+  {id:'t01',phase:'fajr',time:'Before Fajr',name:'Fajr Sunnah',emoji:'🌙',pillars:['faith'],
+   desc:'2 rakaat before Fajr. The Prophet ﷺ never missed these even while travelling.',
+   motivation:'These two rakaat are lighter than everything the world carries — yet heavier on the scale than all of it.',
+   reward:'You began before the world woke. The angels witnessed.'},
+  {id:'t02',phase:'fajr',time:'Fajr time',name:'Fajr Prayer',emoji:'🤲',pillars:['faith'],
+   desc:'Pray with presence, not just motion. Face the qibla with full intention.',
+   motivation:'The angels of the night and day both witness Fajr. You are seen.',
+   reward:'You are now under Allah\'s protection until Maghrib.'},
+  {id:'t03',phase:'fajr',time:'After Fajr',name:'Quran — 1 page',emoji:'📖',pillars:['faith'],
+   desc:'Read with meaning, tajweed and contemplation. One page minimum. If you exceed it, better.',
+   motivation:'One page every day is 365 pages a year. You are building something that lasts.',
+   reward:'Each letter earns 10 rewards. You are richer than you think.'},
+  {id:'t04',phase:'fajr',time:'After Quran',name:'Adhkar Al-Sabah',emoji:'🌿',pillars:['faith'],
+   desc:'Morning remembrance — Ayat al-Kursi, last two verses of Baqarah, morning duas. Use Hisn al-Muslim app.',
+   motivation:'These words are your armour. You do not enter the day unprotected.',
+   reward:'Whoever says morning adhkar is in Allah\'s care until evening. You are held.'},
+  {id:'t05',phase:'fajr',time:'After Adhkar',name:'Personal Dua',emoji:'🕊️',pillars:['faith'],
+   desc:'Ask for what you need today — the transfer, your health, your parents, your future. Be specific.',
+   motivation:'Allah loves those who are persistent in asking. He does not tire of your voice.',
+   reward:'This is the conversation nothing else can replace.'},
+  {id:'t06',phase:'morning',time:'5:00–5:30',name:'Thyroxine + chia water',emoji:'💧',pillars:['food'],
+   desc:'Take thyroxine first. Drink soaked chia seed water. Wait 30 min before coffee. Non-negotiable for thyroid health.',
+   motivation:'This one act protects your metabolism and energy for the entire day.',
+   reward:'Your body is being cared for before anyone else\'s demands reach it.'},
+  {id:'t07',phase:'morning',time:'5:30–6:00',name:'Gratitude + intention',emoji:'✨',pillars:['faith'],
+   desc:'Three specific things you are grateful for — not general, specific. Then name one quality you want to bring to today.',
+   motivation:'The brain cannot simultaneously feel grateful and anxious. You are rewiring yours.',
+   reward:'You have set the emotional tone for your entire day.'},
+  {id:'t08',phase:'morning',time:'5:45–6:10',name:'Morning stretch',emoji:'🧘',pillars:['body'],
+   desc:'5–10 minutes gentle movement — neck rolls, shoulder circles, cat-cow, hip circles. While breakfast cooks.',
+   motivation:'Your body has been carrying tension all night. Give it five minutes before it carries the day.',
+   reward:'This is what it feels like to live in your body instead of just through it.'},
+  {id:'t09',phase:'morning',time:'6:00–6:30',name:'Breakfast ritual',emoji:'☕',pillars:['food'],
+   desc:'Toasted sandwich in the airfryer. Coffee brewed slowly. Sit down. Eat without rushing. Colourful if possible.',
+   motivation:'You are not fuelling to survive. You are nourishing to thrive.',
+   reward:'You ate something beautiful before the world took anything from you.'},
+  {id:'t10',phase:'work',time:'Dhuhr time',name:'Dhuhr Prayer',emoji:'🤲',pillars:['faith'],
+   desc:'Step away for 5 minutes. Even online. Pray Dhuhr as soon as its time enters.',
+   motivation:'Five prayers are the structure that hold everything else upright.',
+   reward:'A pause in the middle of difficulty is not weakness. It is wisdom.'},
+  {id:'t11',phase:'work',time:'Asr time',name:'Asr Prayer',emoji:'🌤️',pillars:['faith'],
+   desc:'Pray Asr before its time passes. The Prophet ﷺ said missing it is like losing one\'s family and wealth.',
+   motivation:'This prayer stands between you and the evening. Pray it on time.',
+   reward:'You kept your covenant with Allah in the middle of your hardest hours.'},
+  {id:'t12',phase:'afterwork',time:'Immediately after work',name:'Treadmill — 30 min incline',emoji:'🏃',pillars:['body'],
+   hard:true,
+   desc:'Bag down. Shoes on. Treadmill. BEFORE the sofa. This is the rule. The sofa can wait 30 minutes.',
+   motivation:'This is the hardest task of the day. That is exactly why it comes first. The first 3 minutes are the only hard ones — after that your body takes over.',
+   reward:'Movement metabolises cortisol. You will genuinely feel different when you step off. You earned that.'},
+  {id:'t13',phase:'afterwork',time:'After treadmill (Tue/Thu/Sat)',name:'Upper body — 25 min',emoji:'💪',pillars:['body'],
+   hard:true,
+   desc:'Shoulder press 3×12 · Lateral raises 3×12 · Bent-over rows 3×12 · Bicep curls 3×12 · Tricep extension 3×12 · Push-ups 3×10. Knee-safe only.',
+   motivation:'Every rep builds the body that will carry you through the next chapter of your life.',
+   reward:'You chose to be stronger today. Your future self feels this.'},
+  {id:'t14',phase:'afterwork',time:'After work',name:'Check card is locked',emoji:'🔒',pillars:['finance'],
+   desc:'Open ADCB app. Confirm card is still locked, monthly limit AED 500, online transactions off. Takes 30 seconds.',
+   motivation:'One check protects weeks of financial progress.',
+   reward:'Your future financial self is safe for another day.'},
+  {id:'t14b',phase:'afterwork',time:'Any time',name:'No impulse spend check',emoji:'🔒',pillars:['finance'],
+   desc:'Before any unplanned purchase or food order, pause and ask: Is this linked to work or socialising? If not — put the phone down. Coffee shops are for work sessions or time with people, not boredom or habit.',
+   motivation:'Every impulse buy is borrowed from your future self. She is trying to save AED 5,000 by July.',
+   reward:'You protected your plan today. That is a real win worth logging.'},
+  {id:'t15',phase:'afterwork',time:'3× per week',name:'Portfolio or job application',emoji:'✦',pillars:['portfolio'],
+   desc:'20 minutes minimum — work on Notion portfolio, refine a case study, or send one properly tailored application. Quality over quantity. Aim for 3× per week, not daily.',
+   motivation:'One good application is worth ten rushed ones. You are building a career, not just applying for jobs.',
+   reward:'You invested in your future tonight.'},
+  {id:'t16',phase:'afterwork',time:'When possible',name:'Driving practice',emoji:'🚗',pillars:['driving'],
+   desc:'Session with your sister. Quiet roads, residential areas. Focus on one thing at a time — do not try to master everything in one session.',
+   motivation:'Your sister is calm. The roads are manageable. The only way through the fear is through it, slowly.',
+   reward:'Each session removes a layer of anxiety. You are building confidence that no one can take from you.'},
+  {id:'t17',phase:'evening',time:'After Maghrib',name:'Maghrib Sunnah + Adhkar Al-Masa',emoji:'🌅',pillars:['faith'],
+   desc:'2 rakaat sunnah after Maghrib. Then evening remembrance — Ayat al-Kursi, evening duas. 10–15 minutes.',
+   motivation:'You are closing the day the same way you opened it — with remembrance.',
+   reward:'The angels record: she did not forget.'},
+  {id:'t18',phase:'evening',time:'Evening',name:'Lay out gym kit',emoji:'👟',pillars:['body'],
+   desc:'Set out tomorrow\'s workout clothes before you sleep. Every decision removed from tomorrow morning is a barrier gone.',
+   motivation:'This takes 60 seconds. It removes the biggest barrier to tomorrow\'s treadmill.',
+   reward:'Tomorrow\'s you just had one less excuse. She thanks you.'},
+  {id:'t19',phase:'evening',time:'Evening',name:'Planned evening snack',emoji:'🍵',pillars:['food'],
+   desc:'Your chosen snack with a hot drink. Sit down. Enjoy it without guilt — this was planned and it is yours.',
+   motivation:'Eating something you chose with intention is nourishment. That is what this is.',
+   reward:'You treated yourself with care tonight.'},
+  {id:'t20',phase:'night',time:'Before sleep',name:'Isha + Witr',emoji:'🕯️',pillars:['faith'],
+   desc:'Pray Isha then Witr — the prayer that closes the day. Make Witr your last act before sleep.',
+   motivation:'End where you began. With Allah.',
+   reward:'Every prayer kept today. That is everything.'},
+  {id:'t21',phase:'night',time:'Before sleep',name:'Skincare ritual',emoji:'🪷',pillars:['body'],
+   desc:'Double cleanse, treat, moisturise. Slowly. This is self-respect made visible.',
+   motivation:'You are worth the five minutes.',
+   reward:'Your skin is cared for. So is the part of you that does the caring.'},
+];
+
+const PILLARS_DEF = [
+  {id:'faith',    name:'Faith',              emoji:'🕌', taskIds:['t01','t02','t03','t04','t05','t07','t10','t11','t17','t20']},
+  {id:'body',     name:'Body',               emoji:'🌿', taskIds:['t08','t12','t13','t18','t21']},
+  {id:'food',     name:'Food & Nourishment', emoji:'🍊', taskIds:['t06','t09','t19']},
+  {id:'finance',  name:'Finances',           emoji:'🪙', taskIds:['t14','t14b']},
+  {id:'portfolio',name:'Portfolio & Career', emoji:'✦', taskIds:['t15']},
+  {id:'driving',  name:'Driving',            emoji:'🚗', taskIds:['t16']},
+];
+
+const PHASES = [
+  {id:'fajr',      label:'Fajr & Early Morning', icon:'🌙', hours:[3,4,5,6],          sub:'The most sacred hours. Begin with your Lord.'},
+  {id:'morning',   label:'Morning Routine',       icon:'🌤️', hours:[5,6,7],            sub:'Anchor yourself before the day begins.'},
+  {id:'work',      label:'Work Day',              icon:'📚', hours:[7,8,9,10,11,12,13,14,15], sub:'You are prepared. Show up.'},
+  {id:'afterwork', label:'After Work',            icon:'🏃', hours:[15,16,17],         sub:'Bag down. Shoes on. Before the sofa.'},
+  {id:'evening',   label:'Evening Ritual',        icon:'🌅', hours:[17,18,19,20],      sub:'Wind down with intention.'},
+  {id:'night',     label:'Night',                 icon:'🕯️', hours:[20,21,22,23,0,1,2], sub:'Close the day as you opened it.'},
+];
+
+const CHAR_STATES = [
+  {min:0,  fig:'🌱',state:'Just beginning her journey',   faith:'Faith: awakening',body:'Body: resting',   mind:'Mind: settling'},
+  {min:20, fig:'🌿',state:'Finding her rhythm',           faith:'Faith: stirring', body:'Body: waking',    mind:'Mind: opening'},
+  {min:40, fig:'🌸',state:'Growing stronger each day',    faith:'Faith: grounding',body:'Body: moving',    mind:'Mind: clearing'},
+  {min:60, fig:'🌺',state:'Rooted and rising',            faith:'Faith: anchored', body:'Body: strong',    mind:'Mind: focused'},
+  {min:80, fig:'☀️',state:'Radiating her own light',      faith:'Faith: luminous', body:'Body: vibrant',   mind:'Mind: clear'},
+  {min:100,fig:'✨',state:'She is Nour — pure light',     faith:'Faith: complete', body:'Body: flourishing',mind:'Mind: bright'},
+];
+
+const QUOTES = [
+  {text:'Verily, with hardship comes ease.',src:'Quran 94:5'},
+  {text:'And He found you lost and guided you.',src:'Quran 93:7'},
+  {text:'So remember Me; I will remember you.',src:'Quran 2:152'},
+  {text:'Whoever relies upon Allah — He is sufficient for him.',src:'Quran 65:3'},
+  {text:'Your Lord has not taken leave of you, nor has He detested you.',src:'Quran 93:3'},
+  {text:'Be patient — surely Allah is with the patient.',src:'Quran 8:46'},
+  {text:'Allah does not burden a soul beyond that it can bear.',src:'Quran 2:286'},
+];
+
+let expanded = {};
+let doneCollapsed = true;
+let state = loadState();
+
+function loadState() {
+  const today = getToday();
+  const saved = JSON.parse(localStorage.getItem('nour_v3') || 'null');
+  const wins = JSON.parse(localStorage.getItem('nour_wins') || '[]');
+  if (saved && saved.date === today) {saved.wins=wins; return saved;}
+  const streak = saved && saved.date === getYesterday() ? (saved.streak||0) : 0;
+  return {date:today, checked:{}, streak, wins};
+}
+
+function saveState() {
+  localStorage.setItem('nour_v3', JSON.stringify({date:state.date,checked:state.checked,streak:state.streak}));
+  localStorage.setItem('nour_wins', JSON.stringify(state.wins||[]));
+}
+
+function getToday() {return new Date().toISOString().split('T')[0];}
+function getYesterday() {const d=new Date();d.setDate(d.getDate()-1);return d.toISOString().split('T')[0];}
+
+function getDayCount() {
+  const start = new Date(START_DATE);
+  const today = new Date();
+  const diff = Math.floor((today - start) / 86400000) + 1;
+  if (diff < 1) return '–';
+  return Math.min(diff, 75);
+}
+
+function getCurrentPhase() {
+  const h = new Date().getHours();
+  return PHASES.find(p => p.hours.includes(h)) || PHASES[2];
+}
+
+function renderTaskCard(t, active) {
+  const done = state.checked[t.id];
+  const exp = expanded[t.id];
+  return `
+    <div class="task-card ${t.hard && !done ? 'urgent' : ''} ${done ? 'done-card' : ''}" id="card-${t.id}">
+      <div class="task-top" onclick="toggleExpand('${t.id}')">
+        <span class="task-emoji">${t.emoji}</span>
+        <div class="task-main">
+          <div class="task-name">${t.name}</div>
+          <div class="task-desc">${t.desc}</div>
+        </div>
+        <span class="task-time-badge">${t.time}</span>
+      </div>
+      ${exp || done ? `
+        <div class="task-expand">
+          ${!done ? `<div class="task-motivation">${t.hard ? '⚡ ' : ''}${t.motivation}</div>` : ''}
+          ${done ? `<div class="task-reward">✓ ${t.reward}</div>` : ''}
+          <button class="task-btn ${done ? 'undone' : ''}" onclick="markDone('${t.id}')">${done ? 'Undo' : 'Done ✓'}</button>
+        </div>` : ''}
+    </div>`;
+}
+
+function buildTasks() {
+  const phase = getCurrentPhase();
+  document.getElementById('bannerIcon').textContent = phase.icon;
+  document.getElementById('bannerTitle').textContent = phase.label;
+  document.getElementById('bannerSub').textContent = phase.sub;
+
+  const nowTasks = ALL_TASKS.filter(t => t.phase === phase.id);
+  const doneTasks = ALL_TASKS.filter(t => t.phase !== phase.id && state.checked[t.id]);
+  const phaseIdx = PHASES.findIndex(p => p.id === phase.id);
+  const nextPhase = PHASES[phaseIdx+1];
+  const upcomingTasks = nextPhase ? ALL_TASKS.filter(t => t.phase === nextPhase.id).slice(0,3) : [];
+
+  const nowEl = document.getElementById('nowSection');
+  const upEl = document.getElementById('upcomingSection');
+  const doneEl = document.getElementById('doneSection');
+
+  nowEl.innerHTML = nowTasks.length
+    ? `<div class="section-title">Right now — ${phase.label}</div>${nowTasks.map(t => renderTaskCard(t, true)).join('')}`
+    : '';
+
+  upEl.innerHTML = upcomingTasks.length
+    ? `<div class="section-title" style="margin-top:4px">Coming up — ${nextPhase.label}</div>${upcomingTasks.map(t => renderTaskCard(t, false)).join('')}`
+    : '';
+
+  if (doneTasks.length) {
+    doneEl.innerHTML = `
+      <div class="collapse-toggle ${doneCollapsed ? '' : 'open'}" onclick="toggleDone()">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <path d="M2 4l4 4 4-4" stroke="var(--text-muted)" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <span>${doneTasks.length} completed earlier</span>
+      </div>
+      ${doneCollapsed ? '' : doneTasks.map(t => renderTaskCard(t, false)).join('')}`;
+  } else {
+    doneEl.innerHTML = '';
+  }
+}
+
+function toggleExpand(id) {
+  expanded[id] = !expanded[id];
+  buildTasks();
+}
+
+function toggleDone() {
+  doneCollapsed = !doneCollapsed;
+  buildTasks();
+}
+
+function markDone(id) {
+  state.checked[id] = !state.checked[id];
+  updateProgress();
+  buildTasks();
+  buildPillars();
+  updateCharacter();
+  buildMealLog();
+  saveState();
+}
+
+function updateProgress() {
+  const total = ALL_TASKS.length;
+  const done = ALL_TASKS.filter(t => state.checked[t.id]).length;
+  const pct = Math.round((done/total)*100);
+  document.getElementById('progressPct').textContent = pct+'%';
+  const circ = 194.78;
+  document.getElementById('progressCircle').style.strokeDashoffset = circ-(circ*pct/100);
+  const g = pct===100 ? ['Day complete ✦','You showed up for yourself'] :
+            pct>=75 ? ['Almost there','One more stretch'] :
+            pct>=50 ? ['Halfway through','Your Nour is growing'] :
+            pct>=25 ? ['You\'ve begun','Keep the momentum'] :
+            ['Begin with Bismillah','Your morning anchor awaits'];
+  document.getElementById('progressGreeting').textContent = g[0];
+  document.getElementById('progressSub').textContent = g[1];
+  if (pct===100) {
+    const prev = JSON.parse(localStorage.getItem('nour_v3')||'{}');
+    if (!prev.streakUpdated) {
+      state.streak = (state.streak||0)+1;
+      document.getElementById('streakCount').textContent = state.streak;
+      prev.streakUpdated = true;
+      localStorage.setItem('nour_v3', JSON.stringify({...prev, streak:state.streak, streakUpdated:true}));
+    }
+  }
+}
+
+function buildPillars() {
+  const el = document.getElementById('pillarsAccordion');
+  if (!el) return;
+  el.innerHTML = PILLARS_DEF.map(p => {
+    const tasks = ALL_TASKS.filter(t => p.taskIds.includes(t.id));
+    const done = tasks.filter(t => state.checked[t.id]).length;
+    const pct = tasks.length ? Math.round((done/tasks.length)*100) : 0;
+    const isOpen = expanded['pillar_'+p.id];
+    return `
+      <div class="pillar-accord">
+        <div class="pillar-accord-header" onclick="togglePillar('${p.id}')">
+          <span class="pillar-accord-icon">${p.emoji}</span>
+          <div class="pillar-accord-main">
+            <div class="pillar-accord-name">${p.name}</div>
+            <div class="pillar-accord-sub">${done}/${tasks.length || 0} tasks${tasks.length===0 ? ' — tap to track manually' : ''}</div>
+          </div>
+          <div class="pillar-accord-right">
+            <span class="pillar-accord-pct">${pct}%</span>
+            <div class="pillar-accord-bar"><div class="pillar-accord-fill" style="width:${pct}%"></div></div>
+          </div>
+        </div>
+        ${isOpen ? `
+          <div class="pillar-accord-body">
+            ${tasks.length ? tasks.map(t => `
+              <div class="pillar-task-row ${state.checked[t.id] ? 'done' : ''}" onclick="markDone('${t.id}')">
+                <div class="pillar-check">
+                  ${state.checked[t.id] ? `<svg width="9" height="7" viewBox="0 0 9 7" fill="none"><path d="M1 3.5l2.5 2.5 4.5-5" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>` : ''}
+                </div>
+                <span class="pillar-task-name">${t.name}</span>
+                <span class="pillar-task-emoji">${t.emoji}</span>
+              </div>`) .join('') : '<div style="font-size:12px;color:var(--text-muted);padding:8px 0;font-style:italic">No daily tasks yet — track weekly progress manually</div>'}
+          </div>` : ''}
+      </div>`;
+  }).join('');
+}
+
+function togglePillar(id) {
+  expanded['pillar_'+id] = !expanded['pillar_'+id];
+  buildPillars();
+}
+
+function updateCharacter() {
+  const total = ALL_TASKS.length;
+  const done = ALL_TASKS.filter(t => state.checked[t.id]).length;
+  const pct = Math.round((done/total)*100);
+  const cs = [...CHAR_STATES].reverse().find(c => pct>=c.min)||CHAR_STATES[0];
+  const fig=document.getElementById('charFig');
+  if(fig){
+    fig.textContent=cs.fig;
+    document.getElementById('charState').textContent=cs.state;
+    document.getElementById('cpFaith').textContent=cs.faith;
+    document.getElementById('cpBody').textContent=cs.body;
+    document.getElementById('cpMind').textContent=cs.mind;
+  }
+}
+
+function buildWins() {
+  const el=document.getElementById('winsList');
+  if(!el) return;
+  const wins=state.wins||[];
+  if(!wins.length){el.innerHTML='<div class="empty-state">Your first win is waiting to be written...</div>';return;}
+  el.innerHTML=wins.slice().reverse().map(w=>`
+    <div class="win-item">
+      <div class="win-dot"></div>
+      <div class="win-text">${w.text}</div>
+      <div class="win-date">${w.date}</div>
+    </div>`).join('');
+}
+
+function addWin() {
+  const inp=document.getElementById('winInput');
+  const text=inp.value.trim();
+  if(!text) return;
+  if(!state.wins) state.wins=[];
+  state.wins.push({text,date:new Date().toLocaleDateString('en-AE',{day:'numeric',month:'short'})});
+  inp.value='';
+  buildWins();
+  saveState();
+}
+
+document.getElementById('winInput').addEventListener('keydown',e=>{if(e.key==='Enter')addWin();});
+
+function setQuote() {
+  const q=QUOTES[new Date().getDay()%QUOTES.length];
+  const el=document.getElementById('dailyQuote');
+  const src=document.getElementById('quoteSource');
+  if(el){el.textContent=q.text;src.textContent='— '+q.src;}
+}
+
+function switchPage(page,btn) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  if(page==='pillars'){buildPillars();updateCharacter();setQuote();}
+  if(page==='food') buildMealLog();
+  if(page==='wins') buildWins();
+}
+
+function init() {
+  document.getElementById('dateStr').innerHTML = new Date().toLocaleDateString('en-AE',{weekday:'long',day:'numeric',month:'long'}).replace(',','<br>');
+  document.getElementById('streakCount').textContent = state.streak||0;
+  document.getElementById('dayCount').textContent = getDayCount();
+  buildTasks();
+  updateProgress();
+  setInterval(buildTasks, 60000);
+}
+
+
+const MEALS = [
+  {id:'meal_b', emoji:'☀️', name:'Breakfast', sub:'Toastie · fruit · coffee'},
+  {id:'meal_l', emoji:'🌿', name:'Lunch',     sub:'Protein · carb · veg'},
+  {id:'meal_s', emoji:'🍊', name:'Snack',     sub:'Snack box if needed'},
+  {id:'meal_d', emoji:'🌙', name:'Dinner',    sub:'Comforting protein plate'},
+  {id:'meal_t', emoji:'🍵', name:'Evening treat', sub:'Chosen · intentional · yours'},
+];
+
+function buildMealLog() {
+  const el = document.getElementById('mealLog');
+  if (!el) return;
+  el.innerHTML = MEALS.map(m => {
+    const done = state.checked[m.id];
+    return `
+      <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);cursor:pointer;" onclick="markDone('${m.id}')">
+        <span style="font-size:18px">${m.emoji}</span>
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:500;${done ? 'color:var(--text-muted);text-decoration:line-through' : ''}">${m.name}</div>
+          <div style="font-size:11px;color:var(--text-muted)">${m.sub}</div>
+        </div>
+        <div style="width:20px;height:20px;border-radius:50%;border:1.5px solid var(--border-strong);display:flex;align-items:center;justify-content:center;background:${done ? 'var(--success)' : 'transparent'};border-color:${done ? 'var(--success)' : 'var(--border-strong)'};">
+          ${done ? '<svg width="9" height="7" viewBox="0 0 9 7" fill="none"><path d="M1 3.5l2.5 2.5 4.5-5" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>' : ''}
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function toggleRecipe(id) {
+  const el = document.getElementById(id);
+  if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+
+init();
+</script>
+</body>
+</html>
+<!-- FOOD PAGE INJECTION - add via JS -->
