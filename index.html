@@ -174,6 +174,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text-p
     </div>
   </div>
 
+  <div id="dayScheduleBanner" style="margin:10px 24px 0;padding:12px 14px;background:var(--warm-white);border-radius:12px;border:1px solid var(--border);"></div>
   <div class="section" id="nowSection"></div>
   <div class="section" id="upcomingSection"></div>
   <div class="section" id="doneSection"></div>
@@ -622,19 +623,19 @@ const ALL_TASKS = [
    desc:'Ask for what you need today — the transfer, your health, your parents, your future. Be specific.',
    motivation:'Allah loves those who are persistent in asking. He does not tire of your voice.',
    reward:'This is the conversation nothing else can replace.'},
-  {id:'t06',phase:'morning',time:'5:00–5:30',name:'Thyroxine + chia water',emoji:'💧',pillars:['food'],
+  {id:'t06',phase:'morning',time:'4:30–5:00',name:'Thyroxine + chia water',emoji:'💧',pillars:['food'],
    desc:'Take thyroxine first. Drink soaked chia seed water. Wait 30 min before coffee. Non-negotiable for thyroid health.',
    motivation:'This one act protects your metabolism and energy for the entire day.',
    reward:'Your body is being cared for before anyone else\'s demands reach it.'},
-  {id:'t07',phase:'morning',time:'5:30–6:00',name:'Gratitude + intention',emoji:'✨',pillars:['faith'],
+  {id:'t07',phase:'morning',time:'4:45–5:15',name:'Gratitude + intention',emoji:'✨',pillars:['faith'],
    desc:'Three specific things you are grateful for — not general, specific. Then name one quality you want to bring to today.',
    motivation:'The brain cannot simultaneously feel grateful and anxious. You are rewiring yours.',
    reward:'You have set the emotional tone for your entire day.'},
-  {id:'t08',phase:'morning',time:'5:45–6:10',name:'Morning stretch',emoji:'🧘',pillars:['body'],
+  {id:'t08',phase:'morning',time:'5:00–5:20',name:'Morning stretch',emoji:'🧘',pillars:['body'],
    desc:'5–10 minutes gentle movement — neck rolls, shoulder circles, cat-cow, hip circles. While breakfast cooks.',
    motivation:'Your body has been carrying tension all night. Give it five minutes before it carries the day.',
    reward:'This is what it feels like to live in your body instead of just through it.'},
-  {id:'t09',phase:'morning',time:'6:00–6:30',name:'Breakfast ritual',emoji:'☕',pillars:['food'],
+  {id:'t09',phase:'morning',time:'5:15–5:45',name:'Breakfast ritual',emoji:'☕',pillars:['food'],
    desc:'Toasted sandwich in the airfryer. Coffee brewed slowly. Sit down. Eat without rushing. Colourful if possible.',
    motivation:'You are not fuelling to survive. You are nourishing to thrive.',
    reward:'You ate something beautiful before the world took anything from you.'},
@@ -704,8 +705,8 @@ const PILLARS_DEF = [
 ];
 
 const PHASES = [
-  {id:'fajr',      label:'Fajr & Early Morning', icon:'🌙', hours:[3,4,5,6],          sub:'The most sacred hours. Begin with your Lord.'},
-  {id:'morning',   label:'Morning Routine',       icon:'🌤️', hours:[5,6,7],            sub:'Anchor yourself before the day begins.'},
+  {id:'fajr',      label:'Fajr & Early Morning', icon:'🌙', hours:[2,3,4,5],          sub:'The most sacred hours. Begin with your Lord.'},
+  {id:'morning',   label:'Morning Routine',       icon:'🌤️', hours:[4,5,6],            sub:'Anchor yourself before the day begins.'},
   {id:'work',      label:'Work Day',              icon:'📚', hours:[7,8,9,10,11,12,13,14,15], sub:'You are prepared. Show up.'},
   {id:'afternoon', label:'Afternoon',             icon:'☀️', hours:[11,12,13,14],       sub:'Stay present. Prayers on time.'},
   {id:'afterwork', label:'After Work',            icon:'🏃', hours:[15,16,17],         sub:'Bag down. Shoes on. Before the sofa.'},
@@ -988,6 +989,7 @@ function init() {
   document.getElementById('streakCount').textContent = state.streak||0;
   document.getElementById('dayCount').textContent = getDayCount();
   buildTasks();
+  buildDayBanner();
   updateProgress();
   setInterval(buildTasks, 60000);
 }
@@ -1018,6 +1020,34 @@ function buildMealLog() {
         </div>
       </div>`;
   }).join('');
+}
+
+
+function getDaySchedule() {
+  const day = new Date().getDay();
+  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const schedules = {
+    0: { label:'Sunday', tags:['🏃 Treadmill','💪 Strength','✦ Portfolio'], rest:false },
+    1: { label:'Monday', tags:['🏃 Treadmill'], rest:false },
+    2: { label:'Tuesday', tags:['🏃 Treadmill','💪 Strength','✦ Portfolio'], rest:false },
+    3: { label:'Wednesday', tags:['🏃 Treadmill'], rest:false },
+    4: { label:'Thursday', tags:['🏃 Treadmill','💪 Strength','✦ Portfolio'], rest:false },
+    5: { label:'Friday', tags:['🚗 Driving practice','Rest from treadmill'], rest:true },
+    6: { label:'Saturday', tags:['💪 Strength','✦ Portfolio','🚗 Driving practice'], rest:false },
+  };
+  return schedules[day];
+}
+
+function buildDayBanner() {
+  const schedule = getDaySchedule();
+  const el = document.getElementById('dayScheduleBanner');
+  if (!el) return;
+  el.innerHTML = `
+    <div style="font-size:11px;font-weight:500;color:var(--text-muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;">Today's Focus</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;">
+      ${schedule.tags.map(t => `<span style="padding:4px 10px;background:${t.includes('Rest') ? 'var(--success-light)' : 'var(--cream-dark)'};border-radius:20px;font-size:11px;color:${t.includes('Rest') ? 'var(--success)' : 'var(--text-secondary)'};font-weight:500;">${t}</span>`).join('')}
+    </div>
+  `;
 }
 
 function toggleRecipe(id) {
