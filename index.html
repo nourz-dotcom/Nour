@@ -638,11 +638,11 @@ const ALL_TASKS = [
    desc:'Toasted sandwich in the airfryer. Coffee brewed slowly. Sit down. Eat without rushing. Colourful if possible.',
    motivation:'You are not fuelling to survive. You are nourishing to thrive.',
    reward:'You ate something beautiful before the world took anything from you.'},
-  {id:'t10',phase:'work',time:'Dhuhr time',name:'Dhuhr Prayer',emoji:'🤲',pillars:['faith'],
+  {id:'t10',phase:'afternoon',time:'Dhuhr time',name:'Dhuhr Prayer',emoji:'🤲',pillars:['faith'],
    desc:'Step away for 5 minutes. Even online. Pray Dhuhr as soon as its time enters.',
    motivation:'Five prayers are the structure that hold everything else upright.',
    reward:'A pause in the middle of difficulty is not weakness. It is wisdom.'},
-  {id:'t11',phase:'work',time:'Asr time',name:'Asr Prayer',emoji:'🌤️',pillars:['faith'],
+  {id:'t11',phase:'afternoon',time:'Asr time',name:'Asr Prayer',emoji:'🌤️',pillars:['faith'],
    desc:'Pray Asr before its time passes. The Prophet ﷺ said missing it is like losing one\'s family and wealth.',
    motivation:'This prayer stands between you and the evening. Pray it on time.',
    reward:'You kept your covenant with Allah in the middle of your hardest hours.'},
@@ -653,7 +653,7 @@ const ALL_TASKS = [
    reward:'Movement metabolises cortisol. You will genuinely feel different when you step off. You earned that.'},
   {id:'t13',phase:'afterwork',time:'After treadmill (Tue/Thu/Sat)',name:'Upper body — 25 min',emoji:'💪',pillars:['body'],
    hard:true,
-   desc:'Shoulder press 3×12 · Lateral raises 3×12 · Bent-over rows 3×12 · Bicep curls 3×12 · Tricep extension 3×12 · Push-ups 3×10. Knee-safe only.',
+   desc:'Tuesday · Thursday · Saturday only. Shoulder press 3×12 · Lateral raises 3×12 · Bent-over rows 3×12 · Bicep curls 3×12 · Tricep extension 3×12 · Push-ups 3×10. Knee-safe only.',
    motivation:'Every rep builds the body that will carry you through the next chapter of your life.',
    reward:'You chose to be stronger today. Your future self feels this.'},
   {id:'t14',phase:'afterwork',time:'After work',name:'Check card is locked',emoji:'🔒',pillars:['finance'],
@@ -665,11 +665,11 @@ const ALL_TASKS = [
    motivation:'Every impulse buy is borrowed from your future self. She is trying to save AED 5,000 by July.',
    reward:'You protected your plan today. That is a real win worth logging.'},
   {id:'t15',phase:'afterwork',time:'3× per week',name:'Portfolio or job application',emoji:'✦',pillars:['portfolio'],
-   desc:'20 minutes minimum — work on Notion portfolio, refine a case study, or send one properly tailored application. Quality over quantity. Aim for 3× per week, not daily.',
+   desc:'Tuesday · Thursday · Saturday — 20 minutes minimum. Work on Notion portfolio, refine a case study, or send one properly tailored application. One good application beats ten rushed ones.',
    motivation:'One good application is worth ten rushed ones. You are building a career, not just applying for jobs.',
    reward:'You invested in your future tonight.'},
   {id:'t16',phase:'afterwork',time:'When possible',name:'Driving practice',emoji:'🚗',pillars:['driving'],
-   desc:'Session with your sister. Quiet roads, residential areas. Focus on one thing at a time — do not try to master everything in one session.',
+   desc:'Friday or Saturday — session with your sister. Quiet roads, residential areas. Focus on one thing at a time. Consistency over perfection.',
    motivation:'Your sister is calm. The roads are manageable. The only way through the fear is through it, slowly.',
    reward:'Each session removes a layer of anxiety. You are building confidence that no one can take from you.'},
   {id:'t17',phase:'evening',time:'After Maghrib',name:'Maghrib Sunnah + Adhkar Al-Masa',emoji:'🌅',pillars:['faith'],
@@ -707,6 +707,7 @@ const PHASES = [
   {id:'fajr',      label:'Fajr & Early Morning', icon:'🌙', hours:[3,4,5,6],          sub:'The most sacred hours. Begin with your Lord.'},
   {id:'morning',   label:'Morning Routine',       icon:'🌤️', hours:[5,6,7],            sub:'Anchor yourself before the day begins.'},
   {id:'work',      label:'Work Day',              icon:'📚', hours:[7,8,9,10,11,12,13,14,15], sub:'You are prepared. Show up.'},
+  {id:'afternoon', label:'Afternoon',             icon:'☀️', hours:[11,12,13,14],       sub:'Stay present. Prayers on time.'},
   {id:'afterwork', label:'After Work',            icon:'🏃', hours:[15,16,17],         sub:'Bag down. Shoes on. Before the sofa.'},
   {id:'evening',   label:'Evening Ritual',        icon:'🌅', hours:[17,18,19,20],      sub:'Wind down with intention.'},
   {id:'night',     label:'Night',                 icon:'🕯️', hours:[20,21,22,23,0,1,2], sub:'Close the day as you opened it.'},
@@ -793,7 +794,20 @@ function buildTasks() {
   document.getElementById('bannerTitle').textContent = phase.label;
   document.getElementById('bannerSub').textContent = phase.sub;
 
-  const nowTasks = ALL_TASKS.filter(t => t.phase === phase.id);
+  const dayOfWeek = new Date().getDay(); // 0=Sun,1=Mon,2=Tue,3=Wed,4=Thu,5=Fri,6=Sat
+  const isStrengthDay = [2,4,6].includes(dayOfWeek); // Tue, Thu, Sat
+  const isPortfolioDay = [2,4,6].includes(dayOfWeek); // Tue, Thu, Sat
+  const isTreadmillDay = [0,1,2,3,4].includes(dayOfWeek); // Sun–Thu
+  const isGymKitDay = [0,1,2,3].includes(dayOfWeek); // Sun–Wed (lay out for Mon–Thu)
+  const nowTasks = ALL_TASKS.filter(t => {
+    if (t.phase !== phase.id) return false;
+    if (t.id === 't13' && !isStrengthDay) return false;   // strength Tue/Thu/Sat only
+    if (t.id === 't15' && !isPortfolioDay) return false;  // portfolio Tue/Thu/Sat only
+    if (t.id === 't16' && ![5,6].includes(dayOfWeek)) return false; // driving Fri/Sat only
+    if (t.id === 't12' && !isTreadmillDay) return false;  // treadmill Sun–Thu only
+    if (t.id === 't18' && !isGymKitDay) return false;     // gym kit Sun–Wed only
+    return true;
+  });
   const doneTasks = ALL_TASKS.filter(t => t.phase !== phase.id && state.checked[t.id]);
   const phaseIdx = PHASES.findIndex(p => p.id === phase.id);
   const nextPhase = PHASES[phaseIdx+1];
