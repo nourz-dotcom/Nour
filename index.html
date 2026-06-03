@@ -611,11 +611,11 @@ const ALL_TASKS = [
    desc:'Pray with presence, not just motion. Face the qibla with full intention.',
    motivation:'The angels of the night and day both witness Fajr. You are seen.',
    reward:'You are now under Allah\'s protection until Maghrib.'},
-  {id:'t03',phase:'fajr',time:'After Fajr',name:'Quran — 1 page',emoji:'📖',pillars:['faith'],
+  {id:'t03',phase:'fajr',time:'5:50am',name:'Quran — 1 page',emoji:'📖',pillars:['faith'],
    desc:'Read with meaning, tajweed and contemplation. One page minimum. If you exceed it, better.',
    motivation:'One page every day is 365 pages a year. You are building something that lasts.',
    reward:'Each letter earns 10 rewards. You are richer than you think.'},
-  {id:'t04',phase:'fajr',time:'After Quran',name:'Adhkar Al-Sabah',emoji:'🌿',pillars:['faith'],
+  {id:'t04',phase:'fajr',time:'6:00am',name:'Adhkar Al-Sabah',emoji:'🌿',pillars:['faith'],
    desc:'Morning remembrance — Ayat al-Kursi, last two verses of Baqarah, morning duas. Use Hisn al-Muslim app.',
    motivation:'These words are your armour. You do not enter the day unprotected.',
    reward:'Whoever says morning adhkar is in Allah\'s care until evening. You are held.'},
@@ -623,19 +623,19 @@ const ALL_TASKS = [
    desc:'Ask for what you need today — the transfer, your health, your parents, your future. Be specific.',
    motivation:'Allah loves those who are persistent in asking. He does not tire of your voice.',
    reward:'This is the conversation nothing else can replace.'},
-  {id:'t06',phase:'morning',time:'4:30–5:00',name:'Thyroxine + chia water',emoji:'💧',pillars:['food'],
+  {id:'t06',phase:'morning',time:'4:05am',name:'Thyroxine + chia water',emoji:'💧',pillars:['food'],
    desc:'Take thyroxine first. Drink soaked chia seed water. Wait 30 min before coffee. Non-negotiable for thyroid health.',
    motivation:'This one act protects your metabolism and energy for the entire day.',
    reward:'Your body is being cared for before anyone else\'s demands reach it.'},
-  {id:'t07',phase:'morning',time:'4:45–5:15',name:'Gratitude + intention',emoji:'✨',pillars:['faith'],
+  {id:'t07',phase:'afternoon',time:'Lunchtime or Dhuhr',name:'Gratitude + intention',emoji:'✨',pillars:['faith'],
    desc:'Three specific things you are grateful for — not general, specific. Then name one quality you want to bring to today.',
    motivation:'The brain cannot simultaneously feel grateful and anxious. You are rewiring yours.',
    reward:'You have set the emotional tone for your entire day.'},
-  {id:'t08',phase:'morning',time:'5:00–5:20',name:'Morning stretch',emoji:'🧘',pillars:['body'],
+  {id:'t08',phase:'morning',time:'5:05am — after treadmill',name:'Morning stretch',emoji:'🧘',pillars:['body'],
    desc:'5–10 minutes gentle movement — neck rolls, shoulder circles, cat-cow, hip circles. While breakfast cooks.',
    motivation:'Your body has been carrying tension all night. Give it five minutes before it carries the day.',
    reward:'This is what it feels like to live in your body instead of just through it.'},
-  {id:'t09',phase:'morning',time:'5:15–5:45',name:'Breakfast ritual',emoji:'☕',pillars:['food'],
+  {id:'t09',phase:'morning',time:'5:30am',name:'Breakfast ritual',emoji:'☕',pillars:['food'],
    desc:'Toasted sandwich in the airfryer. Coffee brewed slowly. Sit down. Eat without rushing. Colourful if possible.',
    motivation:'You are not fuelling to survive. You are nourishing to thrive.',
    reward:'You ate something beautiful before the world took anything from you.'},
@@ -647,12 +647,12 @@ const ALL_TASKS = [
    desc:'Pray Asr before its time passes. The Prophet ﷺ said missing it is like losing one\'s family and wealth.',
    motivation:'This prayer stands between you and the evening. Pray it on time.',
    reward:'You kept your covenant with Allah in the middle of your hardest hours.'},
-  {id:'t12',phase:'afterwork',time:'Immediately after work',name:'Treadmill — 30 min incline',emoji:'🏃',pillars:['body'],
+  {id:'t12',phase:'morning',time:'4:30am — after Fajr',name:'Treadmill — 30 min incline',emoji:'🏃',pillars:['body'],
    hard:true,
-   desc:'Bag down. Shoes on. Treadmill. BEFORE the sofa. This is the rule. The sofa can wait 30 minutes.',
-   motivation:'This is the hardest task of the day. That is exactly why it comes first. The first 3 minutes are the only hard ones — after that your body takes over.',
-   reward:'Movement metabolises cortisol. You will genuinely feel different when you step off. You earned that.'},
-  {id:'t13',phase:'afterwork',time:'After treadmill (Tue/Thu/Sat)',name:'Upper body — 25 min',emoji:'💪',pillars:['body'],
+   desc:'Straight after Fajr. Lights on, shoes on, treadmill. Podcast on. Do not sit down first — move while the intention is fresh.',
+   motivation:'The world is still asleep. You are already moving. That is who you are becoming.',
+   reward:'You worked out before most people woke up. The rest of the day is already a bonus.'},
+  {id:'t13',phase:'morning',time:'5:00am — Tue/Thu/Sat',name:'Upper body — 25 min',emoji:'💪',pillars:['body'],
    hard:true,
    desc:'Tuesday · Thursday · Saturday only. Shoulder press 3×12 · Lateral raises 3×12 · Bent-over rows 3×12 · Bicep curls 3×12 · Tricep extension 3×12 · Push-ups 3×10. Knee-safe only.',
    motivation:'Every rep builds the body that will carry you through the next chapter of your life.',
@@ -678,7 +678,7 @@ const ALL_TASKS = [
    motivation:'You are closing the day the same way you opened it — with remembrance.',
    reward:'The angels record: she did not forget.'},
   {id:'t18',phase:'evening',time:'Evening',name:'Lay out gym kit',emoji:'👟',pillars:['body'],
-   desc:'Set out tomorrow\'s workout clothes before you sleep. Every decision removed from tomorrow morning is a barrier gone.',
+   desc:'Set out tomorrow\'s workout clothes tonight. Shoes, clothes, everything ready. When you wake for Fajr, your kit is waiting — no decisions needed.',
    motivation:'This takes 60 seconds. It removes the biggest barrier to tomorrow\'s treadmill.',
    reward:'Tomorrow\'s you just had one less excuse. She thanks you.'},
   {id:'t19',phase:'evening',time:'Evening',name:'Planned evening snack',emoji:'🍵',pillars:['food'],
@@ -706,7 +706,7 @@ const PILLARS_DEF = [
 
 const PHASES = [
   {id:'fajr',      label:'Fajr & Early Morning', icon:'🌙', hours:[2,3,4,5],          sub:'The most sacred hours. Begin with your Lord.'},
-  {id:'morning',   label:'Morning Routine',       icon:'🌤️', hours:[4,5,6],            sub:'Anchor yourself before the day begins.'},
+  {id:'morning',   label:'Morning Routine',       icon:'🌤️', hours:[4,5,6,7],          sub:'Move, nourish, ground yourself before the world begins.'},
   {id:'work',      label:'Work Day',              icon:'📚', hours:[7,8,9,10,11,12,13,14,15], sub:'You are prepared. Show up.'},
   {id:'afternoon', label:'Afternoon',             icon:'☀️', hours:[11,12,13,14],       sub:'Stay present. Prayers on time.'},
   {id:'afterwork', label:'After Work',            icon:'🏃', hours:[15,16,17],         sub:'Bag down. Shoes on. Before the sofa.'},
@@ -798,7 +798,7 @@ function buildTasks() {
   const dayOfWeek = new Date().getDay(); // 0=Sun,1=Mon,2=Tue,3=Wed,4=Thu,5=Fri,6=Sat
   const isStrengthDay = [2,4,6].includes(dayOfWeek); // Tue, Thu, Sat
   const isPortfolioDay = [2,4,6].includes(dayOfWeek); // Tue, Thu, Sat
-  const isTreadmillDay = [0,1,2,3,4].includes(dayOfWeek); // Sun–Thu
+  const isTreadmillDay = [0,1,2,3,4,6].includes(dayOfWeek); // Sun–Thu + Sat
   const isGymKitDay = [0,1,2,3].includes(dayOfWeek); // Sun–Wed (lay out for Mon–Thu)
   const nowTasks = ALL_TASKS.filter(t => {
     if (t.phase !== phase.id) return false;
@@ -1027,13 +1027,13 @@ function getDaySchedule() {
   const day = new Date().getDay();
   const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
   const schedules = {
-    0: { label:'Sunday', tags:['🏃 Treadmill','💪 Strength','✦ Portfolio'], rest:false },
-    1: { label:'Monday', tags:['🏃 Treadmill'], rest:false },
-    2: { label:'Tuesday', tags:['🏃 Treadmill','💪 Strength','✦ Portfolio'], rest:false },
-    3: { label:'Wednesday', tags:['🏃 Treadmill'], rest:false },
-    4: { label:'Thursday', tags:['🏃 Treadmill','💪 Strength','✦ Portfolio'], rest:false },
-    5: { label:'Friday', tags:['🚗 Driving practice','Rest from treadmill'], rest:true },
-    6: { label:'Saturday', tags:['💪 Strength','✦ Portfolio','🚗 Driving practice'], rest:false },
+    0: { label:'Sunday', tags:['🌙 Fajr + Quran','🏃 Treadmill','💪 Strength','✦ Portfolio'], rest:false },
+    1: { label:'Monday', tags:['🌙 Fajr + Quran','🏃 Treadmill'], rest:false },
+    2: { label:'Tuesday', tags:['🌙 Fajr + Quran','🏃 Treadmill','💪 Strength','✦ Portfolio'], rest:false },
+    3: { label:'Wednesday', tags:['🌙 Fajr + Quran','🏃 Treadmill'], rest:false },
+    4: { label:'Thursday', tags:['🌙 Fajr + Quran','🏃 Treadmill','💪 Strength','✦ Portfolio'], rest:false },
+    5: { label:'Friday', tags:['🌙 Fajr + Quran','🚗 Driving practice','Rest day — no treadmill'], rest:true },
+    6: { label:'Saturday', tags:['🌙 Fajr + Quran','💪 Strength','✦ Portfolio','🚗 Driving practice'], rest:false },
   };
   return schedules[day];
 }
